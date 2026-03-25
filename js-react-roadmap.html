@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS + React Teaching Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161d;
+    --bg3: #1a1e28;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #e8e6df;
+    --text-muted: #7a7d8a;
+    --text-faint: #42454f;
+    --accent: #5b8cff;
+
+    --c0: #888780; --c0l: #2C2C2A; --c0bg: #D3D1C7;
+    --c1: #378ADD; --c1l: #042C53; --c1bg: #B5D4F4;
+    --c2: #1D9E75; --c2l: #04342C; --c2bg: #9FE1CB;
+    --c3: #7F77DD; --c3l: #26215C; --c3bg: #CECBF6;
+    --c4: #BA7517; --c4l: #412402; --c4bg: #FAC775;
+    --c5: #D85A30; --c5l: #4A1B0C; --c5bg: #F5C4B3;
+    --c6: #639922; --c6l: #173404; --c6bg: #C0DD97;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 64px 40px 48px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(91,140,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 520px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .stat-chip strong {
+    font-weight: 600;
+    color: #fff;
+  }
+  .stat-chip.primary { border-color: var(--accent); }
+  .stat-chip.primary strong { color: var(--accent); }
+
+  .global-progress {
+    flex: 1; min-width: 160px;
+    height: 4px;
+    background: var(--bg3);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-left: 8px;
+  }
+  .global-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a78bfa);
+    border-radius: 99px;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  .reset-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── PHASE ── */
+  .phase {
+    margin-bottom: 10px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    transition: border-color 0.2s;
+  }
+  .phase:hover { border-color: var(--border-hover); }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .phase-header:hover { background: rgba(255,255,255,0.02); }
+
+  .phase-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    min-width: 28px;
+  }
+
+  .phase-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    flex: 1;
+  }
+
+  .phase-meta {
+    font-size: 12px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  .phase-progress-ring {
+    position: relative;
+    width: 32px; height: 32px;
+    flex-shrink: 0;
+  }
+  .phase-progress-ring svg {
+    transform: rotate(-90deg);
+  }
+  .ring-bg { fill: none; stroke: var(--bg3); stroke-width: 2.5; }
+  .ring-fill { fill: none; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dashoffset 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .ring-pct {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px; font-weight: 600; color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .phase-chevron {
+    font-size: 11px;
+    color: var(--text-faint);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .phase.open .phase-chevron { transform: rotate(90deg); }
+
+  /* ── PHASE BODY ── */
+  .phase-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 4px 0 8px;
+  }
+  .phase.open .phase-body { display: block; }
+
+  /* ── TOPIC ── */
+  .topic {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 22px 12px 64px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-bottom: 1px solid transparent;
+  }
+  .topic:hover { background: rgba(255,255,255,0.02); }
+  .topic:last-child { border-bottom: none; }
+
+  .topic-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-faint);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-size: 10px;
+    color: #fff;
+  }
+
+  .topic.done .topic-check { border-color: transparent; }
+  .topic.done .topic-name { text-decoration: line-through; color: var(--text-muted); }
+  .topic.done { opacity: 0.55; }
+
+  .topic-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.15s;
+  }
+  .topic-desc {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 2px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .topic-tags {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    letter-spacing: 0.03em;
+    font-weight: 400;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    max-width: 900px;
+    margin: 0 auto 32px;
+    padding: 0 40px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center;
+  }
+  .legend-label {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .legend-chip {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .legend-chip:not(.active) { opacity: 0.4; }
+  .legend-chip.active { opacity: 1; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero, .main, .stats-bar, .legend { padding-left: 18px; padding-right: 18px; }
+    h1 { font-size: 28px; }
+    .topic { padding-left: 18px; }
+    .phase-header { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Teaching Curriculum</div>
+  <h1>JS + <span>React</span><br>Roadmap</h1>
+  <p class="hero-sub">A structured 20-week curriculum from zero to deployable React apps. Click any topic to mark it as taught.</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-chip primary"><strong id="stat-done">0</strong> completed</div>
+  <div class="stat-chip"><strong id="stat-total">0</strong> topics</div>
+  <div class="stat-chip"><strong id="stat-weeks">20</strong> weeks</div>
+  <div class="global-progress"><div class="global-progress-fill" id="global-bar"></div></div>
+  <span id="global-pct" style="font-size:13px;color:var(--text-muted);min-width:36px;text-align:right">0%</span>
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Filter:</span>
+  <span class="legend-chip active" data-tag="all" style="background:#1a1e28;color:#7a7d8a;border:1px solid rgba(255,255,255,0.1)" onclick="filterTag('all')">All</span>
+</div>
+
+<main class="main" id="phases-container"></main>
+
+<script>
+const phases = [
+  {
+    id:'p0', num:'00', label:'Pre-requisites', weeks:'Week 0',
+    color:'#888780', badgeBg:'rgba(136,135,128,0.15)', badgeColor:'#888780', ring:'#888780',
+    topics:[
+      {name:'How the Web Works',desc:'HTTP basics, DNS, browsers, client vs server model',tags:['theory']},
+      {name:'HTML Fundamentals',desc:'Tags, structure, semantic HTML5 elements, forms',tags:['html']},
+      {name:'CSS Fundamentals',desc:'Selectors, box model, flexbox, basic grid layout',tags:['css']},
+      {name:'Dev Environment Setup',desc:'VS Code, browser DevTools, Node.js & npm, terminal basics',tags:['tooling']},
+    ]
+  },
+  {
+    id:'p1', num:'01', label:'JavaScript Core', weeks:'Week 1–4',
+    color:'#378ADD', badgeBg:'rgba(55,138,221,0.15)', badgeColor:'#6aadee', ring:'#378ADD',
+    topics:[
+      {name:'Variables & Data Types',desc:'var / let / const, primitives vs objects, typeof operator',tags:['basics']},
+      {name:'Operators & Expressions',desc:'Arithmetic, comparison, logical, ternary operator',tags:['basics']},
+      {name:'Control Flow',desc:'if/else, switch, for, while loops, for...of / for...in',tags:['basics']},
+      {name:'Functions',desc:'Declarations, expressions, arrow functions, parameters & return',tags:['functions']},
+      {name:'Scope & Hoisting',desc:'Global vs block vs function scope, hoisting quirks with var',tags:['functions']},
+      {name:'Arrays',desc:'map, filter, reduce, find, forEach, spread, destructuring',tags:['data']},
+      {name:'Objects',desc:'Properties, methods, this keyword, destructuring, spread',tags:['data']},
+      {name:'DOM Manipulation',desc:'querySelector, events, addEventListener, innerHTML vs textContent',tags:['dom']},
+      {name:'Error Handling',desc:'try/catch/finally, Error objects, reading stack traces',tags:['basics']},
+    ]
+  },
+  {
+    id:'p2', num:'02', label:'Intermediate JavaScript', weeks:'Week 5–7',
+    color:'#1D9E75', badgeBg:'rgba(29,158,117,0.15)', badgeColor:'#3dbf90', ring:'#1D9E75',
+    topics:[
+      {name:'Closures',desc:'Lexical scope, closure applications, counter & factory patterns',tags:['advanced']},
+      {name:'Callbacks & Higher-Order Functions',desc:'Passing functions, composing behavior, callback hell intro',tags:['async']},
+      {name:'Promises',desc:'new Promise, .then / .catch / .finally, chaining promises',tags:['async']},
+      {name:'Async / Await',desc:'async functions, awaiting promises, error handling with try/catch',tags:['async']},
+      {name:'Fetch API',desc:'HTTP requests, handling JSON responses, loading & error states',tags:['async','api']},
+      {name:'ES6+ Features',desc:'Template literals, optional chaining ?., nullish coalescing ??, modules',tags:['modern']},
+      {name:'Classes & Prototypes',desc:'class syntax, constructor, inheritance, extends & super',tags:['oop']},
+      {name:'Array & String Methods Deep Dive',desc:'flat, flatMap, at(), Object.keys/values/entries, String methods',tags:['data']},
+    ]
+  },
+  {
+    id:'p3', num:'03', label:'React Foundations', weeks:'Week 8–11',
+    color:'#7F77DD', badgeBg:'rgba(127,119,221,0.15)', badgeColor:'#a09ae8', ring:'#7F77DD',
+    topics:[
+      {name:'Why React? Mental Model',desc:'Component thinking, virtual DOM, declarative vs imperative UI',tags:['theory']},
+      {name:'JSX',desc:'JSX syntax, expressions in JSX, className, self-closing tags, Fragment',tags:['jsx']},
+      {name:'Functional Components',desc:'Creating components, props, children prop, default props, PropTypes',tags:['components']},
+      {name:'useState',desc:'Local state, state updates, prev-state pattern, controlled inputs',tags:['hooks']},
+      {name:'useEffect',desc:'Side effects, dependencies array, cleanup functions, common pitfalls',tags:['hooks']},
+      {name:'Conditional Rendering',desc:'&&, ternary operator, early returns, showing and hiding UI',tags:['rendering']},
+      {name:'Lists & Keys',desc:'Rendering arrays with .map(), why keys matter, stable unique keys',tags:['rendering']},
+      {name:'Event Handling',desc:'onClick, onChange, onSubmit, synthetic events, event object',tags:['events']},
+      {name:'Lifting State Up',desc:'Sharing state between siblings via parent, prop drilling basics',tags:['patterns']},
+    ]
+  },
+  {
+    id:'p4', num:'04', label:'React Intermediate', weeks:'Week 12–15',
+    color:'#BA7517', badgeBg:'rgba(186,117,23,0.15)', badgeColor:'#dda040', ring:'#BA7517',
+    topics:[
+      {name:'useContext',desc:'React context, createContext, Provider, Consumer and useContext hook',tags:['hooks','state']},
+      {name:'useReducer',desc:'Reducer pattern, actions & dispatch, when to use vs useState',tags:['hooks','state']},
+      {name:'Custom Hooks',desc:'Extracting logic into hooks, useFetch, useLocalStorage, naming rules',tags:['hooks']},
+      {name:'useRef',desc:'DOM refs, persisting mutable values, forwardRef for child components',tags:['hooks']},
+      {name:'useMemo & useCallback',desc:'Memoization, performance optimization, when NOT to use these hooks',tags:['performance']},
+      {name:'React Router',desc:'BrowserRouter, Route, Link, useParams, useNavigate, nested routes',tags:['routing']},
+      {name:'Forms & Validation',desc:'Controlled forms, validation patterns, intro to React Hook Form',tags:['forms']},
+      {name:'Fetching Data Patterns',desc:'Loading/error/data state machine, custom useFetch hook',tags:['api']},
+    ]
+  },
+  {
+    id:'p5', num:'05', label:'Ecosystem & Tooling', weeks:'Week 16–18',
+    color:'#D85A30', badgeBg:'rgba(216,90,48,0.15)', badgeColor:'#ee7a52', ring:'#D85A30',
+    topics:[
+      {name:'Vite & Project Structure',desc:'Scaffolding with Vite, imports, env vars, build output, HMR',tags:['tooling']},
+      {name:'CSS-in-JS & CSS Modules',desc:'Scoped styles, styled-components, intro to Tailwind CSS utility classes',tags:['styling']},
+      {name:'State Management — Zustand / Redux Toolkit',desc:'Global state, store setup, actions, selectors, devtools',tags:['state']},
+      {name:'React Query / TanStack Query',desc:'Server state, caching, background refetch, mutations, invalidation',tags:['api']},
+      {name:'Testing with Vitest + React Testing Library',desc:'Unit tests, render + userEvent, async tests, mocking modules',tags:['testing']},
+      {name:'TypeScript Basics for React',desc:'Types, interfaces, props typing, generics intro, tsconfig basics',tags:['typescript']},
+      {name:'Git & Collaboration Workflow',desc:'Branches, PRs, code review basics, conventional commits, rebase',tags:['tooling']},
+    ]
+  },
+  {
+    id:'p6', num:'06', label:'Capstone & Beyond', weeks:'Week 19–20',
+    color:'#639922', badgeBg:'rgba(99,153,34,0.15)', badgeColor:'#84c42d', ring:'#639922',
+    topics:[
+      {name:'Full Project From Scratch',desc:'Plan → design → build → deploy: full CRUD app with auth & routing',tags:['project']},
+      {name:'Performance & Optimization',desc:'React DevTools profiler, lazy loading, code splitting, Lighthouse audits',tags:['performance']},
+      {name:'Deployment',desc:'Vercel / Netlify deploy, environment variables in production, CI/CD basics',tags:['tooling']},
+      {name:'Next Steps & Career Paths',desc:'Next.js intro, full-stack options, portfolio advice, job prep tips',tags:['career']},
+    ]
+  },
+];
+
+// Collect all unique tags
+const allTags = [...new Set(phases.flatMap(p => p.topics.flatMap(t => t.tags)))].sort();
+let activeTag = 'all';
+let done = new Set(JSON.parse(localStorage.getItem('jsr_done') || '[]'));
+
+function save() {
+  try { localStorage.setItem('jsr_done', JSON.stringify([...done])); } catch(e) {}
+}
+
+function buildLegend() {
+  const legend = document.querySelector('.legend');
+  allTags.forEach(tag => {
+    const chip = document.createElement('span');
+    chip.className = 'legend-chip active';
+    chip.dataset.tag = tag;
+    chip.textContent = tag;
+    chip.style.cssText = `background:rgba(255,255,255,0.05);color:#7a7d8a;border:1px solid rgba(255,255,255,0.08)`;
+    chip.onclick = () => filterTag(tag);
+    legend.appendChild(chip);
+  });
+}
+
+function filterTag(tag) {
+  activeTag = tag;
+  document.querySelectorAll('.legend-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.tag === tag || tag === 'all' || (tag !== 'all' && c.dataset.tag === 'all'));
+  });
+  document.querySelectorAll('.topic').forEach(el => {
+    if (tag === 'all') { el.style.display = ''; return; }
+    const tags = el.dataset.tags.split(',');
+    el.style.display = tags.includes(tag) ? '' : 'none';
+  });
+}
+
+function updateRing(phaseId) {
+  const phase = phases.find(p => p.id === phaseId);
+  if (!phase) return;
+  const total = phase.topics.length;
+  const comp = phase.topics.filter((_, i) => done.has(phaseId + '-' + i)).length;
+  const pct = total ? Math.round(comp / total * 100) : 0;
+  const el = document.getElementById('ring-fill-' + phaseId);
+  const pctEl = document.getElementById('ring-pct-' + phaseId);
+  if (!el) return;
+  const r = 13, circ = 2 * Math.PI * r;
+  el.style.strokeDasharray = circ;
+  el.style.strokeDashoffset = circ * (1 - pct / 100);
+  if (pctEl) pctEl.textContent = pct + '%';
+}
+
+function updateStats() {
+  const total = phases.reduce((s, p) => s + p.topics.length, 0);
+  const d = done.size;
+  const pct = Math.round(d / total * 100);
+  document.getElementById('stat-done').textContent = d;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('global-bar').style.width = pct + '%';
+  document.getElementById('global-pct').textContent = pct + '%';
+}
+
+function render() {
+  const container = document.getElementById('phases-container');
+  container.innerHTML = '';
+
+  phases.forEach((phase, pi) => {
+    const total = phase.topics.length;
+    const comp = phase.topics.filter((_, i) => done.has(phase.id + '-' + i)).length;
+    const pct = total ? Math.round(comp / total * 100) : 0;
+    const isOpen = localStorage.getItem('open_' + phase.id) !== 'false';
+    const r = 13, circ = 2 * Math.PI * r;
+
+    const div = document.createElement('div');
+    div.className = 'phase' + (isOpen ? ' open' : '');
+    div.id = 'phase-' + phase.id;
+
+    div.innerHTML = `
+      <div class="phase-header" onclick="togglePhase('${phase.id}')">
+        <span class="phase-num">${phase.num}</span>
+        <span class="phase-badge" style="background:${phase.badgeBg};color:${phase.badgeColor}">${phase.label}</span>
+        <span class="phase-title" style="display:none">${phase.label}</span>
+        <span class="phase-meta">${phase.weeks} &nbsp;·&nbsp; ${comp}/${total} done</span>
+        <div class="phase-progress-ring">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <circle class="ring-bg" cx="16" cy="16" r="${r}"/>
+            <circle class="ring-fill" id="ring-fill-${phase.id}" cx="16" cy="16" r="${r}"
+              stroke="${phase.ring}"
+              style="stroke-dasharray:${circ};stroke-dashoffset:${circ * (1 - pct/100)}"/>
+          </svg>
+          <span class="ring-pct" id="ring-pct-${phase.id}">${pct}%</span>
+        </div>
+        <span class="phase-chevron">▶</span>
+      </div>
+      <div class="phase-body" id="body-${phase.id}">
+        ${phase.topics.map((t, i) => {
+          const key = phase.id + '-' + i;
+          const isDone = done.has(key);
+          return `
+            <div class="topic${isDone ? ' done' : ''}" id="topic-${key}" data-key="${key}" data-phase="${phase.id}" data-tags="${t.tags.join(',')}" onclick="toggleTopic('${key}','${phase.id}')">
+              <div class="topic-check" id="check-${key}" style="${isDone ? 'background:'+phase.ring+';border-color:'+phase.ring : ''}">
+                ${isDone ? '✓' : ''}
+              </div>
+              <div>
+                <div class="topic-name">${t.name}</div>
+                <div class="topic-desc">${t.desc}</div>
+                <div class="topic-tags">${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  updateStats();
+}
+
+window.togglePhase = function(id) {
+  const el = document.getElementById('phase-' + id);
+  const isOpen = el.classList.toggle('open');
+  localStorage.setItem('open_' + id, isOpen);
+};
+
+window.toggleTopic = function(key, phaseId) {
+  const topicEl = document.getElementById('topic-' + key);
+  const checkEl = document.getElementById('check-' + key);
+  const phase = phases.find(p => p.id === phaseId);
+
+  if (done.has(key)) {
+    done.delete(key);
+    topicEl.classList.remove('done');
+    checkEl.style.background = '';
+    checkEl.style.borderColor = '';
+    checkEl.innerHTML = '';
+  } else {
+    done.add(key);
+    topicEl.classList.add('done');
+    checkEl.style.background = phase.ring;
+    checkEl.style.borderColor = phase.ring;
+    checkEl.innerHTML = '✓';
+  }
+
+  // Update phase meta
+  const total = phase.topics.length;
+  const comp = phase.topics.filter((_, i) => done.has(phaseId + '-' + i)).length;
+  const metaEl = document.querySelector(`#phase-${phaseId} .phase-meta`);
+  if (metaEl) metaEl.textContent = `${phase.weeks} · ${comp}/${total} done`;
+
+  updateRing(phaseId);
+  updateStats();
+  save();
+};
+
+window.resetAll = function() {
+  if (!confirm('Reset all progress?')) return;
+  done.clear(); save(); render();
+};
+
+buildLegend();
+render();
+
+// Open first two phases by default if no stored preference
+['p0','p1'].forEach(id => {
+  if (localStorage.getItem('open_' + id) === null) {
+    localStorage.setItem('open_' + id, 'true');
+    document.getElementById('phase-' + id)?.classList.add('open');
+  }
+});
+</script>
+</body>
+</html>
